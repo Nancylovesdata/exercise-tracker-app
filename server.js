@@ -2,6 +2,8 @@ require('dotenv').config();
 
 // 1. requiring thhe express package here afyer installing it in the terminal
 const express = require('express')
+// Not sure of number 10.  requiring mongoose
+const mongoose = require('mongoose')
 // 2.starting the express app
 const app = express()
 
@@ -10,12 +12,12 @@ app.use(express.json())
 
 
 // 7.
-const workoutRoutes = require ('./routes/workouts')
+const workoutRoutes = require('./routes/workouts')
 
 // 5. middleware
-app.use((req,res,next)=>{
- console.log(req.path, req.method)
- next()
+app.use((req, res, next) => {
+    console.log(req.path, req.method)
+    next()
 })
 
 
@@ -27,13 +29,17 @@ app.use((req,res,next)=>{
 // })
 
 //8. All the routes from the workout.js
-app.use('/api/workouts',workoutRoutes )
+app.use('/api/workouts', workoutRoutes)
 
-
-
+// 11. connect mongoose to te db
+mongoose.connect(process.env.MONGO_URI)
+.then(() =>{
 
 //3. listen for request
-app.listen(process.env.PORT, ()=>{
-    console.log('listen on port', process.env.PORT)
+app.listen(process.env.PORT, () => {
+    console.log('conected to db & listening on port', process.env.PORT)
 }
- )
+)    
+})
+.catch((error)=>{console.log(error)})
+
